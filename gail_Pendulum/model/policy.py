@@ -32,7 +32,7 @@ class Policy(nn.Module):
         raise NotImplementedError
 
     def __init__(self, discrete_action_sections: list, discrete_state_sections: list, action_log_std=0,
-                 state_log_std=0, max_traj_length=500, n_continuous_action=args.n_continuous_action,
+                 state_log_std=0, max_traj_length=2000, n_continuous_action=args.n_continuous_action,
                  n_discrete_action=args.n_discrete_action, n_discrete_state=args.n_discrete_state,
                  n_continuous_state=args.n_continuous_state, device=device):
         super(Policy, self).__init__()

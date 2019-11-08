@@ -64,10 +64,10 @@ def main():
     )
 
     # load models
-    discriminator.load_state_dict(torch.load('./model_pkl/Discriminator_model_2.pkl'))
-    policy.transition_net.load_state_dict(torch.load('./model_pkl/Transition_model_2.pkl'))
-    policy.policy_net.load_state_dict(torch.load('./model_pkl/Policy_model_2.pkl'))
-    value.load_state_dict(torch.load('./model_pkl/Value_model_2.pkl'))
+    # discriminator.load_state_dict(torch.load('./model_pkl/Discriminator_model_3.pkl'))
+    # policy.transition_net.load_state_dict(torch.load('./model_pkl/Transition_model_3.pkl'))
+    # policy.policy_net.load_state_dict(torch.load('./model_pkl/Policy_model_3.pkl'))
+    # value.load_state_dict(torch.load('./model_pkl/Value_model_3.pkl'))
 
     print('#############  start training  ##############')
 
@@ -146,10 +146,10 @@ def main():
 
         memory.clear_memory()
         # save models
-        torch.save(discriminator.state_dict(), './model_pkl/Discriminator_model_3.pkl')
-        torch.save(policy.transition_net.state_dict(), './model_pkl/Transition_model_3.pkl')
-        torch.save(policy.policy_net.state_dict(), './model_pkl/Policy_model_3.pkl')
-        torch.save(value.state_dict(), './model_pkl/Value_model_3.pkl')
+        torch.save(discriminator.state_dict(), './model_pkl/Discriminator_model_4.pkl')
+        torch.save(policy.transition_net.state_dict(), './model_pkl/Transition_model_4.pkl')
+        torch.save(policy.policy_net.state_dict(), './model_pkl/Policy_model_4.pkl')
+        torch.save(value.state_dict(), './model_pkl/Value_model_4.pkl')
 
 
 def test():
@@ -157,7 +157,7 @@ def test():
     env = gym.make(env_name)
     render = True
     ppo = Policy([0], [0])
-    ppo.policy_net.load_state_dict(torch.load('./model_pkl/Policy_model_3.pkl'))
+    ppo.policy_net.load_state_dict(torch.load('./model_pkl/Policy_model_4.pkl'))
     for ep in range(500):
         ep_reward = 0
         state = env.reset()
@@ -172,12 +172,11 @@ def test():
             action = action.cpu().detach().numpy()
             state, reward, done, _ = env.step(action)
             ep_reward += reward
-            # env.render()
+            env.render()
             if done:
                 break
         # writer.add_scalar('ep_reward', ep_reward, ep)
         print('Episode: {}\tReward: {}'.format(ep, int(ep_reward)))
-        # ep_reward = 0
         env.close()
 
 def evaluate_env():
