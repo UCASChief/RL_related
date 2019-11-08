@@ -3,6 +3,7 @@ import os
 from functools import wraps
 from collections import namedtuple
 import torch
+import torch.cuda
 import torch.nn as nn
 import random
 import configparser
@@ -11,7 +12,6 @@ import numpy as np
 __all__ = ['FloatTensor', 'IntTensor', 'LongTensor', 'Transition', 'add_method', 'to_device', 'ModelArgs',
            'to_FloatTensor', 'to_IntTensor', 'to_LongTensor', 'time_this', '_init_weight', 'Memory', 'device']
 
-FloatTensor = torch.FloatTensor
 IntTensor = torch.IntTensor
 LongTensor = torch.LongTensor
 
@@ -19,8 +19,13 @@ Transition = namedtuple('Transition', (
     'discrete_state', 'continuous_state', 'discrete_action', 'continuous_action',
     'next_discrete_state', 'next_continuous_state', 'old_log_prob', 'mask'
 ))
+use_gpu = True
+device = torch.device('cuda') if use_gpu else torch.device('cpu')
+FloatTensor = torch.FloatTensor if not use_gpu else torch.cuda.FloatTensor
 
-device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+
+# device = torch.device('cpu')
+
 
 def add_method(cls, name=None):
     def decorator(func):
@@ -104,7 +109,7 @@ class Singleton(type):
 class ModelArgs(metaclass=Singleton):
     def __init__(self):
         args = configparser.ConfigParser()
-        args.read(os.path.dirname(__file__)+os.sep+'config.ini')
+        args.read(os.path.dirname(__file__) + os.sep + 'config.ini')
         print('read config')
         self.n_discrete_state = args.getint('policy_net', 'n_discrete_state')
         self.n_continuous_state = args.getint('policy_net', 'n_continuous_state')
